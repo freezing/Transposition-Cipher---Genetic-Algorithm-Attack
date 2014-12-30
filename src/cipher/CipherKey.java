@@ -1,5 +1,6 @@
 package cipher;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class CipherKey {
@@ -52,5 +53,10 @@ public class CipherKey {
 
 	public int getSize() {
 		return permutation.length;
+	}
+	
+	@Override
+	public String toString() {
+		return "Length: " + permutation.length + "; " + Arrays.toString(permutation);
 	}
 }
