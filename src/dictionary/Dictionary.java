@@ -76,7 +76,7 @@ public class Dictionary {
 	}
 	
 	private int getFrequency(Map<String, Integer> countMap, String ngram) {
-		Integer freq = countMap.get(ngram);
+		Integer freq = countMap.get(ngram.toLowerCase());
 		if (freq == null) {
 			return 0;
 		}
@@ -132,7 +132,7 @@ public class Dictionary {
 				}
 				
 				// Put ngram in the map with its count
-				ngramCount.put(ngramBuilder.toString(), count);
+				ngramCount.put(ngramBuilder.toString().toLowerCase(), count);
 			}
 			reader.close();
 		} catch (IOException e) {

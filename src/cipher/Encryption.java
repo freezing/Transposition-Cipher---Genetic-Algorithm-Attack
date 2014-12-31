@@ -17,7 +17,7 @@ public class Encryption {
 	}
 
 	public String encrypt(String inputPlainText) {
-		StringBuilder plainTextBuilder = new StringBuilder(inputPlainText.toUpperCase());
+		StringBuilder plainTextBuilder = new StringBuilder(inputPlainText.toLowerCase());
 		
 		while (plainTextBuilder.length() % key.getSize() != 0) {
 			plainTextBuilder.append(StringUtils.nextRandomChar());

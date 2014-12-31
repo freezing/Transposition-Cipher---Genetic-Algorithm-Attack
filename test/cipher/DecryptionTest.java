@@ -8,11 +8,11 @@ public class DecryptionTest {
 	@Test
 	public void test() {
 		// Input
-		String cipherText = " XTN N OJTBVVACPNTI!OL IKKETOIETIONEE   PIRT JKSEEIA";
+		String cipherText = " XTN N OJTBVVACPNTI!OL IKKETOIETIONEE   PIRT JKSEEIA".toLowerCase();
 		int[] permutationKey = {5, 3, 7, 1, 2, 12, 0, 4, 9, 6, 8, 11, 10};
 		
 		// Output
-		String expectedPlainText = "OVO JE NEKI PLAINTEXT KOJI CE BITI ENKRIPTOVAN! TEST";
+		String expectedPlainText = "OVO JE NEKI PLAINTEXT KOJI CE BITI ENKRIPTOVAN! TEST".toLowerCase();
 		
 		// Processing
 		CipherKey key = new CipherKey(permutationKey);
@@ -26,7 +26,7 @@ public class DecryptionTest {
 	@Test
 	public void testDecryptEncrypt() {
 		// Input
-		String plainText = "OVO JE NEKI ENCRYPTION TEXT. VIDECEMO!!!";
+		String plainText = "OVO JE NEKI ENCRYPTION TEXT. VIDECEMO!!!".toLowerCase();
 		CipherKey key = CipherKey.generate(10);
 		
 		// Expected output

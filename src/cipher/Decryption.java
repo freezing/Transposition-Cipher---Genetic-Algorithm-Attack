@@ -12,6 +12,8 @@ public class Decryption {
 			throw new IllegalArgumentException("Cipher text length is not divisible by key length, therefore key is invalid!");
 		}
 		
+		cipherText = cipherText.toLowerCase();
+		
 		int rowCount = cipherText.length() / key.getSize();
 		// Create columns
 		StringBuilder[] columns = new StringBuilder[key.getSize()];

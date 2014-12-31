@@ -1,9 +1,8 @@
 package genetic.selection;
 
-import java.util.Collection;
-
+import genetic.Population;
 import cipher.CipherKey;
 
 public interface SelectionAlgorithm {
-	public CipherKey select(Collection<CipherKey> keys);
+	public CipherKey select(Population population, String cipherText);
 }

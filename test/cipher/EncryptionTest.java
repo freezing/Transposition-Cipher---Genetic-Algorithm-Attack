@@ -12,7 +12,7 @@ public class EncryptionTest {
 		int[] permutationKey = {5, 3, 7, 1, 2, 12, 0, 4, 9, 6, 8, 11, 10};
 		
 		// Expected output
-		String expected = " XTN N OJTBVVACPNTI!OL IKKETOIETIONEE   PIRT JKSEEIA";
+		String expected = " XTN N OJTBVVACPNTI!OL IKKETOIETIONEE   PIRT JKSEEIA".toLowerCase();
 		
 		// Processing
 		CipherKey key = new CipherKey(permutationKey);
