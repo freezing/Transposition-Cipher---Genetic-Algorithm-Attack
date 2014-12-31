@@ -22,6 +22,14 @@ public class CipherKey {
 		}
 	}
 	
+	public int get(int idx) {
+		return permutation[idx];
+	}
+	
+	public void set(int idx, int value) {
+		permutation[idx] = value;
+	}
+	
 	public int[] getPermutation() {
 		return permutation;
 	}

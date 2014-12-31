@@ -53,7 +53,7 @@ public class GeneticAlgorithm {
 		this.elitism = elitism;
 		
 		selectionAlgorithm = new TournamentSelection();
-		mutationAlgorithm = new MutationAlgorithmImpl();
+		mutationAlgorithm = new MutationAlgorithmImpl(mutationProbability);
 		crossoverAlgorithm = new CrossoverAlgorithmImpl();
 		fitnessFunction = new DictionaryFrequencyFitnessFunction();
 	}
