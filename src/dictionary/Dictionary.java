@@ -19,6 +19,9 @@ public class Dictionary {
 		logger = Logger.getLogger("DictionaryLogger");
 	}
 	
+	private static final double minProbability = 0.000000000001;
+	private static final double minLogProbability = Math.log(minProbability);
+	
 	public static Dictionary getInstance() {
 		if (instance == null) {
 			instance = new Dictionary();
@@ -26,11 +29,13 @@ public class Dictionary {
 		return instance;
 	}
 
+	private Map<String, Integer> wordCount;
 	private Map<String, Integer> bigramCount;
 	private Map<String, Integer> trigramCount;
 	private Map<String, Integer> quadgramCount;
 	private Map<String, Integer> fivegramCount;
 	
+	private int totalWordCount;
 	private int totalBigramsCount;
 	private int totalTrigramsCount;
 	private int totalQuadgramsCount;
@@ -44,6 +49,10 @@ public class Dictionary {
 		return getProbability(ngramString, ngramCount, true);
 	}
 	
+	public boolean exists(String ngramString, int ngramCount) {
+		return getProbability(ngramString, ngramCount) > minProbability;
+	}
+	
 	public double getProbability(String ngramString, int ngramCount) {
 		return getProbability(ngramString, ngramCount, false);
 	}
@@ -52,16 +61,20 @@ public class Dictionary {
 		int freq = 0;
 		int total = 0;
 		
-		if (ngramCount == 2) {
+		if (ngramCount == 1) {
+			freq = getFrequency(wordCount, ngramString);
+			total = totalWordCount;
+		}
+		else if (ngramCount == 2) {
 			freq = getFrequency(bigramCount, ngramString);			
 			total = totalBigramsCount;
 		} else if (ngramCount == 3) {
 			freq = getFrequency(trigramCount, ngramString);
 			total = totalTrigramsCount;
-		} else if (ngramCount == 3) {
+		} else if (ngramCount == 4) {
 			freq = getFrequency(quadgramCount, ngramString);
 			total = totalQuadgramsCount;
-		} else if (ngramCount == 3) {
+		} else if (ngramCount == 5) {
 			freq = getFrequency(fivegramCount, ngramString);
 			total = totalFivegramsCount;
 		} else {
@@ -69,8 +82,14 @@ public class Dictionary {
 		}
 		
 		if (!logProbability) {
+			if (freq == 0) {
+				return minProbability;
+			}
 			return (double)(freq) / (double)(total);
 		} else {
+			if (freq == 0) {
+				return minLogProbability;
+			}
 			return Math.log(freq) - Math.log(total);
 		}
 	}
@@ -86,11 +105,13 @@ public class Dictionary {
 	private void readDictionary() {
 		logger.log(Level.INFO, "Reading dictionaries");
 		
+		wordCount = readNGramsFromFile("w1_.txt");
 		bigramCount = readNGramsFromFile("w2_.txt");
 		trigramCount = readNGramsFromFile("w3_.txt");
 		quadgramCount = readNGramsFromFile("w4_.txt");
 		fivegramCount = readNGramsFromFile("w5_.txt");
 		
+		totalWordCount = getTotalCounts(wordCount);
 		totalBigramsCount = getTotalCounts(bigramCount);
 		totalTrigramsCount = getTotalCounts(trigramCount);
 		totalQuadgramsCount = getTotalCounts(quadgramCount);

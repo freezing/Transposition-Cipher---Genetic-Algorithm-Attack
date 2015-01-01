@@ -1,9 +1,5 @@
 package genetic;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
 import genetic.crossover.CrossoverAlgorithm;
 import genetic.crossover.CrossoverAlgorithmImpl;
 import genetic.fitness.DictionaryFrequencyFitnessFunction;
@@ -12,7 +8,14 @@ import genetic.mutation.MutationAlgorithm;
 import genetic.mutation.MutationAlgorithmImpl;
 import genetic.selection.SelectionAlgorithm;
 import genetic.selection.TournamentSelection;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 import cipher.CipherKey;
+import cipher.Decryption;
 
 public class GeneticAlgorithm {
 	// If elitism is set then evolution keeps the best individual from the previous generation
@@ -44,16 +47,17 @@ public class GeneticAlgorithm {
 	private FitnessFunction fitnessFunction;
 
 	public GeneticAlgorithm(int keySize, int maximumIterations, int initialPoolSize,
-			int maximumConvergeIterations, double mutationProbability, boolean elitism) {
+			int maximumConvergeIterations, double mutationProbability, double crossoverProbability, boolean elitism) {
 		this.keySize = keySize;
 		this.maximumIterations = maximumIterations;
 		this.initialPoolSize = initialPoolSize;
 		this.maximumConvergeIterations = maximumConvergeIterations;
 		this.mutationProbability = mutationProbability;
+		this.crossoverProbability = crossoverProbability;
 		this.elitism = elitism;
 		
 		selectionAlgorithm = new TournamentSelection();
-		mutationAlgorithm = new MutationAlgorithmImpl(mutationProbability);
+		mutationAlgorithm = new MutationAlgorithmImpl(this.mutationProbability);
 		crossoverAlgorithm = new CrossoverAlgorithmImpl();
 		fitnessFunction = new DictionaryFrequencyFitnessFunction();
 	}
@@ -64,9 +68,25 @@ public class GeneticAlgorithm {
 		// Initialize population
 		Population population = new Population(getInitialPopulation());
 		
+		CipherKey fittest = null;
+		int convergeIterations = 0;
+		
 		// Evolve population many times
 		for (int i = 0; i < maximumIterations; i++) {
 			population = evolvePopulation(population, cipherText);
+			// First in the population is the fittest from the last generation
+			CipherKey newFittest = population.get(0);
+			if (fittest != null && fittest.equals(newFittest)) {
+				convergeIterations++;
+			} else {
+				convergeIterations = 0;
+			}
+			fittest = newFittest;
+			
+			// Check convergence
+			if (convergeIterations >= maximumConvergeIterations) {
+				return fitnessFunction.getFittest(population, cipherText);
+			}
 		}
 		
 		// Return the best match from the most evolved generation
@@ -79,7 +99,10 @@ public class GeneticAlgorithm {
 		int elitismOffset = 0;
 		if (elitism) {
 			// Keep the best individual
-			newGeneration.add(fitnessFunction.getFittest(oldGeneration, cipherText));
+			CipherKey fittest = fitnessFunction.getFittest(oldGeneration, cipherText);
+			Decryption decryption = new Decryption(fittest);
+			System.out.println(decryption.decrypt(cipherText) + "   Fitness: " + fitnessFunction.calculateFitness(fittest, cipherText) + "   Key: " + fittest + "  PermutationPos: " + Arrays.toString(fittest.getPermutationPositions()));
+			newGeneration.add(fittest);
 			elitismOffset = 1;
 		}
 		
@@ -92,7 +115,8 @@ public class GeneticAlgorithm {
 		}
 		
 		// Mutate population
-		for (CipherKey key : newGeneration) {
+		for (int i = elitismOffset; i < newGeneration.size(); i++) {
+			CipherKey key = newGeneration.get(i);
 			key = mutationAlgorithm.mutate(key);
 		}
 		

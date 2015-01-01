@@ -11,11 +11,11 @@ public class StringUtils {
 	static Random r = new Random();
 	static char[] alphabet;
 	static {
-		alphabet = new char[Character.getNumericValue('Z') - Character.getNumericValue('A') + 1];
-		for (char letter = 'A'; letter != 'Z'; letter++) {
-			alphabet[Character.getNumericValue(letter) - Character.getNumericValue('A')] = letter;
+		alphabet = new char[Character.getNumericValue('z') - Character.getNumericValue('a') + 1];
+		for (char letter = 'a'; letter != 'z'; letter++) {
+			alphabet[Character.getNumericValue(letter) - Character.getNumericValue('a')] = letter;
 		}
-		alphabet[Character.getNumericValue('Z') - Character.getNumericValue('A')] = 'Z';
+		alphabet[Character.getNumericValue('z') - Character.getNumericValue('a')] = 'z';
 	}
 	
 	public static char nextRandomChar() {

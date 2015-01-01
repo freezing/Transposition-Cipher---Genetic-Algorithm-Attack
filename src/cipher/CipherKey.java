@@ -20,6 +20,17 @@ public class CipherKey {
 		for (int i = 0; i < permutation.length; i++) {
 			permutationPositions[ permutation[i] ] = i;
 		}
+		
+		int count[] = new int[permutation.length];
+		for (int i = 0; i < permutation.length; i++) {
+			count[permutation[i]]++;
+		}
+		
+		for (int i = 0; i < permutation.length; i++) {
+			if (count[i] != 1) {
+				throw new IllegalArgumentException("Permutation: " + toString() + " is not valid permutation!");
+			}
+		}
 	}
 	
 	public int get(int idx) {
@@ -28,6 +39,7 @@ public class CipherKey {
 	
 	public void set(int idx, int value) {
 		permutation[idx] = value;
+		permutationPositions[value] = idx;
 	}
 	
 	public int[] getPermutation() {

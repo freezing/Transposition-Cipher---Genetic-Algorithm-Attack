@@ -30,7 +30,7 @@ public class EncryptionTest {
 		CipherKey key = CipherKey.generate(10);
 		
 		// Expected output
-		String expected = cipherText;
+		String expected = cipherText.toLowerCase();
 		
 		// Processing
 		Decryption decryption = new Decryption(key);

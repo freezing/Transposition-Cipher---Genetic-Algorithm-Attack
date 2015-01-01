@@ -60,7 +60,7 @@ public class Encryption {
 				cipherTextBuilder.append(rows[row].charAt(colIdx));
 			}
 		}
-		return cipherTextBuilder.toString();
+		return cipherTextBuilder.toString().toLowerCase();
 	}
 	
 	public CipherKey getKey() {

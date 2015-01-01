@@ -40,4 +40,27 @@ public class DecryptionTest {
 		// Verification
 		Assert.assertEquals("Plain text is not as expected", expected, actual);
 	}
+	
+	@Test
+	public void testDifferentOutputs() {
+		// Input
+		CipherKey key1 = new CipherKey(new int[]{3, 0, 5, 6, 4, 1, 2});
+		CipherKey key2 = new CipherKey(new int[]{3, 0, 5, 1, 4, 6, 2});
+		CipherKey goodKey = new CipherKey(new int[]{1, 5, 4, 3, 2, 0, 6});
+		
+		String cipherText = "bkiotbsg iylslr i cahy  aent";
+		
+		// Expected output
+		String expected = "";
+		
+		// Processing
+		Decryption decryption1 = new Decryption(key1);
+		Decryption decryption2 = new Decryption(key2);
+		Decryption goodDecryption = new Decryption(goodKey);
+		
+		// Output
+		System.out.println(decryption1.decrypt(cipherText));
+		System.out.println(decryption2.decrypt(cipherText));
+		System.out.println(goodDecryption.decrypt(cipherText));
+	}
 }

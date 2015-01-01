@@ -32,8 +32,9 @@ public class DictionaryFrequencyFitnessFunction implements FitnessFunction {
 			for (String ngram : ngrams) {
 				// For each ngram calculate log probability for it to be in the dictionary
 				// and add the value to the fitness
-				double logProbability = dictionary.getLogProbability(ngram, ngramLength);
-				fitness += logProbability;
+				double probability = dictionary.getProbability(ngram, ngramLength) * ngramLength;
+				//fitness += probability;
+				fitness += dictionary.exists(ngram, ngramLength) ? ngramLength : 0;
 			}
 		}
 		
