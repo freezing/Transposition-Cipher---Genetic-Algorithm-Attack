@@ -4,5 +4,5 @@ import genetic.Population;
 import cipher.CipherKey;
 
 public interface SelectionAlgorithm {
-	public CipherKey select(Population population, String cipherText);
+	public CipherKey select();
 }

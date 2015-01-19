@@ -25,6 +25,18 @@ public class StringUtils {
 	public static void main(String[] args) {
 		
 	}
+	
+
+	public static String prepare(String lowerCase) {
+		String text = "";
+		for (int i = 0; i < lowerCase.length(); i++) {
+			Character c = lowerCase.charAt(i);
+			if (Character.isLetter(c)) {
+				text += c;
+			}
+		}
+		return text.toLowerCase();
+	}
 
 	public static List<String> extractNGrams(String plainText, int ngramLength) {
 		List<String> ngrams = new LinkedList<String>();

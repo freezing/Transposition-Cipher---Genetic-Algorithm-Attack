@@ -14,7 +14,7 @@ public class CipherKey {
 	}
 	
 	public void setPermutation(int[] permutation) {
-		this.permutation = permutation;
+		this.permutation = permutation.clone();
 		this.permutationPositions = new int[permutation.length];
 		
 		for (int i = 0; i < permutation.length; i++) {
@@ -79,4 +79,28 @@ public class CipherKey {
 	public String toString() {
 		return "Length: " + permutation.length + "; " + Arrays.toString(permutation);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(permutation);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CipherKey other = (CipherKey) obj;
+		if (!Arrays.equals(permutation, other.permutation))
+			return false;
+		return true;
+	}
+	
+	
 }

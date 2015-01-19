@@ -1,7 +1,6 @@
 package genetic.selection;
 
 import genetic.Population;
-import genetic.fitness.DictionaryFrequencyFitnessFunction;
 import genetic.fitness.FitnessFunction;
 
 import java.util.Random;
@@ -14,24 +13,31 @@ public class TournamentSelection implements SelectionAlgorithm {
 	private int tournamentSize;
 	private Random r;
 	private FitnessFunction fitnessFunction;
+	private Population population;
+	private String cipherText;
 	
-	public TournamentSelection() {
+	public TournamentSelection(FitnessFunction fitnessFunction, Population population, String cipherText) {
 		this.tournamentSize = DEFAULT_TOURNAMENT_SIZE;
+		this.fitnessFunction = fitnessFunction;
+		this.population = population;
+		this.cipherText = cipherText;
 		init();
 	}
 	
-	public TournamentSelection(int tournamentSize) {
+	public TournamentSelection(int tournamentSize, FitnessFunction fitnessFunction, Population population, String cipherText) {
 		this.tournamentSize = tournamentSize;
+		this.fitnessFunction = fitnessFunction;
+		this.population = population;
+		this.cipherText = cipherText;
 		init();
 	}
 	
 	private void init() {
 		r = new Random();
-		fitnessFunction = new DictionaryFrequencyFitnessFunction();
 	}
 	
 	@Override
-	public CipherKey select(Population population, String cipherText) {
+	public CipherKey select() {
 		CipherKey best = null;
 		double bestFitness = Double.NEGATIVE_INFINITY;
 		
@@ -46,5 +52,4 @@ public class TournamentSelection implements SelectionAlgorithm {
 		}
 		return best;
 	}
-
 }

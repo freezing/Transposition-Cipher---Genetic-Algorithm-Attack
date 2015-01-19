@@ -105,17 +105,37 @@ public class Dictionary {
 	private void readDictionary() {
 		logger.log(Level.INFO, "Reading dictionaries");
 		
-		wordCount = readNGramsFromFile("w1_.txt");
+		//wordCount = readNGramsFromFile("w1_.txt");
 		bigramCount = readNGramsFromFile("w2_.txt");
 		trigramCount = readNGramsFromFile("w3_.txt");
-		quadgramCount = readNGramsFromFile("w4_.txt");
-		fivegramCount = readNGramsFromFile("w5_.txt");
+	//	quadgramCount = readNGramsFromFile("w4_.txt");
+	//	fivegramCount = readNGramsFromFile("w5_.txt");
+		wordCount = createWordCount(bigramCount);
 		
 		totalWordCount = getTotalCounts(wordCount);
 		totalBigramsCount = getTotalCounts(bigramCount);
 		totalTrigramsCount = getTotalCounts(trigramCount);
-		totalQuadgramsCount = getTotalCounts(quadgramCount);
-		totalFivegramsCount = getTotalCounts(fivegramCount);
+	//	totalQuadgramsCount = getTotalCounts(quadgramCount);
+	//	totalFivegramsCount = getTotalCounts(fivegramCount);
+	}
+
+	private Map<String, Integer> createWordCount(
+			Map<String, Integer> ngramCount) {
+		Map<String, Integer> wordCount = new HashMap<String, Integer>();
+		
+		for (String key : ngramCount.keySet()) {
+			int count = ngramCount.get(key);
+			String[] words = key.split(" ");
+			for (String word : words) {
+				if (wordCount.containsKey(word)) {
+					wordCount.put(word, wordCount.get(word) + count);
+				} else {
+					wordCount.put(word, count);
+				}
+			}
+		}
+		
+		return wordCount;
 	}
 
 	private int getTotalCounts(Map<String, Integer> countMap) {

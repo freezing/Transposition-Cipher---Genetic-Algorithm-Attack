@@ -5,9 +5,9 @@ import java.util.Random;
 import cipher.CipherKey;
 
 public class CrossoverAlgorithmImpl implements CrossoverAlgorithm {
-
-	private static final int CROSSOVER_SEGMENT_SIZE = 10;
 	private Random r;
+
+	private static final int CROSSOVER_SEGMENT_SIZE = 4;
 	
 	public CrossoverAlgorithmImpl() {
 		r = new Random();
@@ -18,10 +18,12 @@ public class CrossoverAlgorithmImpl implements CrossoverAlgorithm {
 			double crossoverProbability) {
 		int[] permutation = new int[a.getSize()];
 		
-		if (r.nextDouble() <= crossoverProbability) {
+		double p = r.nextDouble();
+		if (p <= crossoverProbability) {
 			// Acquire random segment
-			int left = r.nextInt(a.getSize());
-			int right = r.nextInt(b.getSize());
+			int left = r.nextInt((a.getSize() - 1) / 2);
+			//int right = r.nextInt(b.getSize());
+			int right = a.getSize() - 1 - left;
 			
 			// If right is less than left swap them
 			if (right < left) {
@@ -48,11 +50,21 @@ public class CrossoverAlgorithmImpl implements CrossoverAlgorithm {
 					idx = fill(gene, permutation, idx, left, right);
 				}
 			}
-		} else {
+		} else if (p < 2) {
 			// Mark[i] is true if value i is containde in permutation
 			boolean mark[] = new boolean[permutation.length];
 			boolean coin = true;
-			for (int i = 0; i < permutation.length; i++) {
+			int start = 0;
+			int end = permutation.length;
+			int step = 1;
+			
+			if (r.nextDouble() <= 0.5) {
+				end = -1;
+				start = permutation.length - 1;
+				step = -1;
+			}
+			
+			for (int i = start; i != end; i += step) {
 				int x = coin ? a.get(i) : b.get(i);
 				if (!mark[x]) {
 					mark[x] = true;
@@ -65,9 +77,32 @@ public class CrossoverAlgorithmImpl implements CrossoverAlgorithm {
 					permutation[i] = x;
 				}
 				
-				if (i % CROSSOVER_SEGMENT_SIZE == 0) {
+				if (i % CROSSOVER_SEGMENT_SIZE == CROSSOVER_SEGMENT_SIZE - 1) {
 					coin = !coin;
 				}
+			}
+		} else {
+			// Acquire random segment
+			int left = r.nextInt(a.getSize());
+			//int right = r.nextInt(b.getSize());
+			int right = r.nextInt(a.getSize());
+			
+			// If right is less than left swap them
+			if (right < left) {
+				int tmp = left;
+				left = right;
+				right = tmp;
+			}
+			
+			for (int i = 0; i < left; i++) {
+				permutation[i] = a.get(i);
+			}
+			
+			int k = left + 1;
+			permutation[left] = a.get(right);
+			for (int i = left; i < a.getSize(); i++) {
+				if (i == right) continue;
+				permutation[k++] = a.get(i);
 			}
 		}
 		
